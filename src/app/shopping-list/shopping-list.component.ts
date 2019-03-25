@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from './shopping-list.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shopping-list',
@@ -15,10 +16,15 @@ export class ShoppingListComponent implements OnInit {
   ingredients: Ingredient[];
 
   /**
+   * 服務訂閱
+   */
+  sLsubscription: Subscription;
+
+  /**
    * 構造函數, 注入ShoppingListService
    * @param {ShoppingListService} private shoppingListService [description]
    */
-  constructor(private shoppingListService: ShoppingListService) { 
+  constructor(private shoppingListService: ShoppingListService) {
   }
 
   /**
@@ -26,11 +32,11 @@ export class ShoppingListComponent implements OnInit {
    */
   ngOnInit() {
     this.ingredients = this.shoppingListService.getIngredients();
-    this.shoppingListService.ingredientsChanged
-    .subscribe(
-      (ingredients: Ingredient[]) => {
-        this.ingredients = ingredients;
-      }
+    this.sLsubscription = this.shoppingListService.ingredientsChanged
+      .subscribe(
+        (ingredients: Ingredient[]) => {
+          this.ingredients = ingredients;
+        }
       );
   }
 
@@ -38,7 +44,7 @@ export class ShoppingListComponent implements OnInit {
    * shopping 清單item click 送出
    * @param index 
    */
-  onEditItem(index: number){
+  onEditItem(index: number) {
     this.shoppingListService.startedEditing.next(index);
   }
 
@@ -46,9 +52,9 @@ export class ShoppingListComponent implements OnInit {
   /**
    * 離開component
    */
-  ngOnDestroy(){
+  ngOnDestroy() {
     // 移除訂閱
-    this.shoppingListService.ingredientsChanged.unsubscribe();
+    this.sLsubscription.unsubscribe();
   }
 
 

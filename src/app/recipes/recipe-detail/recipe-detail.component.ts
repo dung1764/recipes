@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Recipe} from '../recipe.model';
 import { RecipeService } from '../recipe.service';
@@ -18,7 +18,10 @@ export class RecipeDetailComponent implements OnInit {
 	 * @param {RecipeService}  private recipeService [菜單服務]
 	 * @param {ActivatedRoute} private route         [路由服務]
 	 */
-	constructor(private recipeService: RecipeService, private route: ActivatedRoute) { }
+	constructor(
+		private recipeService: RecipeService, 
+		private route: ActivatedRoute,
+		private router: Router) { }
 
 	ngOnInit(){
 		// 訂閱路由參數, 參數有變化會改變資料, 但不會刷新頁面來增加效能
@@ -36,6 +39,14 @@ export class RecipeDetailComponent implements OnInit {
 	 */
 	addToShoppingList(){
 		this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+	}
+
+	/**
+	 * 刪除菜單
+	 */
+	onDelete(){
+		this.recipeService.deleteRecipe(this.id);
+		this.router.navigate(['/recipes']);
 	}
 
 }

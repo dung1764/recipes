@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 
 import { RecipeService } from '../recipe.service';
@@ -16,20 +16,23 @@ export class RecipeEditComponent implements OnInit {
   editMode = false;
   recipeForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private recipeService: RecipeService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private recipeService: RecipeService,
+    private router: Router) { }
 
   /**
    * 初始化, 訂閱route服務, 即時獲的url參數
    */
   ngOnInit() {
-  	this.route.params
-  	.subscribe(
-  		(params: Params) => {
-  			this.id = +params['id'];
-        this.editMode = params['id'] != null;
-        this.initForm();
-  		}
-  	);
+    this.route.params
+      .subscribe(
+        (params: Params) => {
+          this.id = +params['id'];
+          this.editMode = params['id'] != null;
+          this.initForm();
+        }
+      );
   }
 
   /**
@@ -40,16 +43,56 @@ export class RecipeEditComponent implements OnInit {
   }
 
   /**
-   * 表單送出
+   * 表單送出, 可以利用FormGroup get或是value陣列得到表單值, 或是直接.value全部帶入
    */
-  onSubmit(){
-    console.log(this.recipeForm.value);
+  onSubmit() {
+    // const newRecipe = new Recipe(
+    //   this.recipeForm.get('name').value,
+    //   this.recipeForm.value['description'],
+    //   this.recipeForm.value['imagePath'],
+    //   this.recipeForm.value['ingredients']
+    // );
+    if (this.editMode) {
+      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+    } else {
+      this.recipeService.addRecipe(this.recipeForm.value);
+    }
+    this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  /**
+   * 取消返回上一層
+   */
+  onCancel() {
+    this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  /**
+   * 為菜單新增材料
+   */
+  onAddIngredient() {
+    (<FormArray>this.recipeForm.get('ingredients')).push(
+      new FormGroup({
+        name: new FormControl(null, Validators.required),
+        amount: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(/^[1-9]+[0-9]*$/)
+        ])
+      })
+    );
+  }
+
+  /**
+   * 為菜單刪除材料
+   */
+  onDeleteIngredient(index: number) {
+    (<FormArray>this.recipeForm.get('ingredients')).removeAt(index);
   }
 
   /**
    * 表單初始化, 看是新增模式還是編輯模式
    */
-  private initForm(){
+  private initForm() {
     let recipeName = '';
     let recipeImagePath = '';
     let recipeDescription = '';
@@ -65,22 +108,25 @@ export class RecipeEditComponent implements OnInit {
         for (let ingredient of recipe.ingredients) {
           recipeIngredients.push(
             new FormGroup({
-              name: new FormControl(ingredient.name),
-              amount: new FormControl(ingredient.amount)
+              name: new FormControl(ingredient.name, Validators.required),
+              amount: new FormControl(ingredient.amount, [
+                Validators.required,
+                Validators.pattern(/^[1-9]+[0-9]*$/)
+              ])
             })
           );
-          
+
         }
       }
     }
-    
+
     this.recipeForm = new FormGroup({
-      name: new FormControl(recipeName, [Validators.required]),
-      imagePath: new FormControl(recipeImagePath),
-      description: new FormControl(recipeDescription),
+      name: new FormControl(recipeName, Validators.required),
+      imagePath: new FormControl(recipeImagePath, Validators.required),
+      description: new FormControl(recipeDescription, Validators.required),
       ingredients: recipeIngredients
     });
   }
-  
+
 
 }
