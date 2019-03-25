@@ -1,0 +1,17 @@
+<a 
+class="list-group-item overflow-hidden"
+[routerLink]="[index]"
+routerLinkActive="active"
+>
+	<div class="float-left">
+		<h4 class="mb-0">{{ recipe.name }}</h4>
+		<p class="mb-0">{{ recipe.description }}</p>
+	</div>
+	<div class="float-right">
+		<img 
+		[src]="recipe.imagePath" 
+		class="mr-3 img-fluid" 
+		style="max-height:50px;" 
+		alt="{{ recipe.name }}">
+	</div>
+</a>
