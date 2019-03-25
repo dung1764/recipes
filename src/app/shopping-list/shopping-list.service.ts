@@ -9,6 +9,8 @@ export class ShoppingListService{
 	 */
 	ingredientsChanged = new Subject<Ingredient[]>();
 
+	startedEditing = new Subject<number>();
+
 	/**
 	 * 預設材料清單
 	 * @type {Ingredient[]}
@@ -23,6 +25,14 @@ export class ShoppingListService{
 	 */
 	getIngredients(){
 		return this.ingredients.slice();
+	}
+
+	/**
+	 * 獲得單一清單材料
+	 * @param index 
+	 */
+	getIngredinet(index: number){
+		return this.ingredients[index];
 	}
 
 	/**
@@ -43,5 +53,22 @@ export class ShoppingListService{
 		this.ingredientsChanged.next(this.getIngredients());
 	}
 
+	/**
+	 * 
+	 * @param index 更新單筆材料資料
+	 * @param newIngredient 
+	 */
+	updateIngredient(index: number, newIngredient: Ingredient){
+		this.ingredients[index] = newIngredient;
+		this.ingredientsChanged.next(this.getIngredients());
+	}
 
+	/**
+	 * 移除單筆材料資料
+	 * @param index 
+	 */
+	removeIngredient(index: number){
+		this.ingredients.splice(index, 1);
+		this.ingredientsChanged.next(this.getIngredients());
+	}
 }

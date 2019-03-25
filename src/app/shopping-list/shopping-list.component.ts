@@ -35,11 +35,21 @@ export class ShoppingListComponent implements OnInit {
   }
 
   /**
+   * shopping 清單item click 送出
+   * @param index 
+   */
+  onEditItem(index: number){
+    this.shoppingListService.startedEditing.next(index);
+  }
+
+
+  /**
    * 離開component
    */
   ngOnDestroy(){
     // 移除訂閱
     this.shoppingListService.ingredientsChanged.unsubscribe();
   }
+
 
 }
