@@ -1,3 +1,7 @@
+<div *ngIf="!recipe; else notShow" >
+	not show
+</div>
+<ng-template #notShow>
 <div class="row">
 	<div class="col">
 		<img src="{{ recipe.imagePath }}" alt="{{ recipe.name }}" class="img-fluid">
@@ -35,3 +39,4 @@
 		</ul>
 	</div>
 </div>
+</ng-template>
