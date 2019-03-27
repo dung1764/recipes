@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
   <a class="navbar-brand" href="#">Recipe Book</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -14,13 +15,26 @@
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" appDropdown>
+
+      <ng-template [ngIf]="!authService.isAuthenticated()">
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/signup']">SignUp</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/signin']">SignIn</a>
+        </li>
+      </ng-template>
+      <li class="nav-item">
+        <a class="nav-link" (click)="onLogout()" *ngIf="authService.isAuthenticated()">Logout</a>
+      </li>
+      <li class="nav-item dropdown" *ngIf="authService.isAuthenticated()">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" appDropdown>
           Manage
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" (click)="onSaveData()" >Save Data</a>
-          <a class="dropdown-item" (click)="onFetchData()" >Fetch Data</a>
+          <a class="dropdown-item" (click)="onSaveData()">Save Data</a>
+          <a class="dropdown-item" (click)="onFetchData()">Fetch Data</a>
         </div>
       </li>
     </ul>
