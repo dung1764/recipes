@@ -4,33 +4,23 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { ShoppingListService } from './shopping-list/shopping-list.service';
-import { AppRoutingModule } from './app-routing.module';
-import { HttpErrorComponent } from './http-error/http-error.component';
-import { RecipeService } from './recipes/recipe.service';
-import { DataStorageService } from './shared/data-storage.service';
-import { AuthService } from './auth/auth.service';
-import { AuthGuardService } from './auth/auth-guard.service';
 import { ShareModule } from './shared/share.module';
 import { AuthModule } from './auth/auth.module';
-import { HomeComponent } from './home/home.component';
+import { HttpErrorModule } from './http-error/http-error.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HeaderComponent,
-    HttpErrorComponent,
-    HomeComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpErrorModule,
+    ShareModule,
     AuthModule,
-    AppRoutingModule,
-    ShareModule
+    CoreModule
   ],
-  providers: [ShoppingListService, RecipeService, DataStorageService, AuthService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

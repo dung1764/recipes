@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HttpErrorComponent } from './http-error/http-error.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './core/home/home.component';
 
 /**
  * 建立路由規則, 利用loadChildren 建立lazy loading, 按下去才會load 該module提升效能
