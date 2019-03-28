@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { HttpErrorComponent } from './http-error/http-error.component';
 import { HomeComponent } from './core/home/home.component';
@@ -17,11 +17,11 @@ const appRoutes: Routes = [
 ];
 
 /**
- * 路由規則套用輸出使用
+ * 路由規則套用輸出使用, 並設定預先下載loadChildren模組
  * @param {[RouterModule]}} {	imports [description]
  */
 @NgModule({
-	imports: [RouterModule.forRoot(appRoutes)],
+	imports: [RouterModule.forRoot(appRoutes, { preloadingStrategy: PreloadAllModules })],
 	exports: [RouterModule]
 })
 export class AppRoutingModule{
